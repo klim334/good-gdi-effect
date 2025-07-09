@@ -1,0 +1,43 @@
+import win32gui
+import win32api
+import win32con
+import ctypes
+import random
+
+for i in range(0, 100):
+    user32 = ctypes.windll.user32
+    hdc = win32gui.GetDC(0)
+    [x, y] = [user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)]
+    l, t, r, b = win32gui.GetClientRect(win32gui.GetDesktopWindow())
+    v = (
+	    {
+		    "x": int(random.random() * r),
+		    "y": int(random.random() * b),
+		    "Red": int(random.random() * 0xFF00),
+		    "Green": 0,
+		    "Blue": 0,
+		    "Alpha": 0,
+	    },
+	    {
+		    "x": int(random.random() * r),
+		    "y": int(random.random() * b),
+		    "Red": 0,
+		    "Green": int(random.random() * 0xFF00),
+		    "Blue": 0,
+		    "Alpha": 0,
+	    },
+	    {
+		    "x": int(random.random() * r),
+		    "y": int(random.random() * b),
+		    "Red": 0,
+		    "Green": 0,
+                    "Blue": int(random.random() * 0xFF00),
+		    "Alpha": 0,
+	    },
+    )
+    mesh = ((0, 2, 1),)
+    win32gui.GradientFill(hdc, v, mesh, win32con.GRADIENT_FILL_TRIANGLE)
+    win32gui.BitBlt(hdc, random.randint(-100, 100), random.randint(-100, 100), x, y, hdc, 0, 0, win32con.SRCCOPY)
+    win32gui.DrawText(hdc, "BYEE", -1, (random.randrange(x), random.randrange(y), 100, 100), win32con.DT_NOCLIP)
+    win32api.Sleep(10)
+
